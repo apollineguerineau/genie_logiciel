@@ -7,3 +7,5 @@ java -cp target/demo-1.0.jar fr.ensai.demo.Main
 
 # pour run l'application :
 mvn spring-boot:run
+
+http://localhost:8080/localfilesystem
