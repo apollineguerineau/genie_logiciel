@@ -11,4 +11,5 @@
 /home/ensai/Documents/3A/GENIE_LOGICIEL/genie_logiciel/src/main/java/fr/ensai/demo/model/scan/Scan.java
 /home/ensai/Documents/3A/GENIE_LOGICIEL/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/FileSystemScanner.java
 /home/ensai/Documents/3A/GENIE_LOGICIEL/genie_logiciel/src/main/java/fr/ensai/demo/DemoApplication.java
+/home/ensai/Documents/3A/GENIE_LOGICIEL/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/S3FileSystemScanner.java
 /home/ensai/Documents/3A/GENIE_LOGICIEL/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/LocalFileSystemScanner.java

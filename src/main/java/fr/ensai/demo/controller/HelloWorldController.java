@@ -32,18 +32,22 @@ public class HelloWorldController {
         // Obtaining the list of visited files
         List<FileLeaf> visitedFiles = visitor.getVisitedFiles();
 
-        // Generating the response
-        StringBuilder responseBuilder = new StringBuilder();
-        responseBuilder.append("<h1>List of files:</h1>");
+        // Generating the HTML table
+        StringBuilder tableBuilder = new StringBuilder();
+        tableBuilder.append("<table border=\"1\">");
+        tableBuilder.append("<tr><th>Name</th><th>File Extension</th><th>Parent Folder Name</th><th>Modification Date</th><th>Size</th></tr>");
         for (FileLeaf file : visitedFiles) {
-            responseBuilder.append("<p>Name: ").append(file.getName()).append("</p>");
-            responseBuilder.append("<p>File Extension: ").append(file.getFileExtension()).append("</p>");
-            responseBuilder.append("<p>Parent Folder Name: ").append(file.getParentFolderName()).append("</p>");
-            responseBuilder.append("<p>Modification Date: ").append(file.getModificationDate()).append("</p>");
-            responseBuilder.append("<p>Size: ").append(file.getSize()).append("</p>");
+            tableBuilder.append("<tr>");
+            tableBuilder.append("<td>").append(file.getName()).append("</td>");
+            tableBuilder.append("<td>").append(file.getFileExtension()).append("</td>");
+            tableBuilder.append("<td>").append(file.getParentFolderName()).append("</td>");
+            tableBuilder.append("<td>").append(file.getModificationDate()).append("</td>");
+            tableBuilder.append("<td>").append(file.getSize()).append("</td>");
+            tableBuilder.append("</tr>");
         }
+        tableBuilder.append("</table>");
 
-        return responseBuilder.toString();
+        return tableBuilder.toString();
     }
 }
 

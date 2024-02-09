@@ -1,0 +1,12 @@
+fr/ensai/demo/model/strategy/LocalFileSystemScanner.class
+fr/ensai/demo/model/visitor/InterfaceFileSystemVisitor.class
+fr/ensai/demo/model/strategy/InterfaceFileSystemScannerStrategy.class
+fr/ensai/demo/model/visitor/FileSystemVisitor.class
+fr/ensai/demo/DemoApplication.class
+fr/ensai/demo/Main.class
+fr/ensai/demo/model/filesystem/InterfaceFileSystemComponent.class
+fr/ensai/demo/model/filesystem/FileLeaf.class
+fr/ensai/demo/controller/HelloWorldController.class
+fr/ensai/demo/model/scan/Scan.class
+fr/ensai/demo/model/strategy/FileSystemScanner.class
+fr/ensai/demo/model/filesystem/FolderComponent.class
