@@ -47,6 +47,10 @@ public class FolderComponent implements InterfaceFileSystemComponent {
     public int getDepth() {
         return depth;
     }
+
+    public List<InterfaceFileSystemComponent> getComponents() {
+        return components;
+    }
 }
 
 

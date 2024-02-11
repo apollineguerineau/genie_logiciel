@@ -1,9 +1,11 @@
 package fr.ensai.demo.model.strategy;
 
 import fr.ensai.demo.model.scan.Scan;
+import fr.ensai.demo.model.visitor.FileSystemVisitor;
 import fr.ensai.demo.model.filesystem.*;
 import java.io.File; 
 import java.util.Date;
+import java.util.List;
 import java.text.*;
 
 public class LocalFileSystemScanner implements InterfaceFileSystemScannerStrategy {
@@ -19,10 +21,15 @@ public class LocalFileSystemScanner implements InterfaceFileSystemScannerStrateg
 
     @Override
     public Scan scanFileSystem(FolderComponent folder, String filenameFilter, String extensionFilter, int maxFiles, int maxDepth) {
-        // Logic to scan local file system
-        // You need to implement this according to your requirements
-        // For example, you can recursively traverse the folder hierarchy, applying filters and counting files
-        return null; // Placeholder, replace with actual implementation
+        FileSystemVisitor visitor = new FileSystemVisitor(filenameFilter, extensionFilter, maxDepth, maxFiles);
+        folder.accept(visitor);
+        List<FileLeaf> visitedFiles = visitor.getVisitedFiles();
+        int size = 0;
+        for (FileLeaf file : visitedFiles) {
+            size+=(file.getSize());
+        };
+        Scan scan = new Scan(0, "local file system", "11/02", filenameFilter, extensionFilter, folder.getName(), 0, size, maxFiles, maxDepth, visitedFiles);
+        return scan; // Placeholder, replace with actual implementation
     }
 
     private FolderComponent importFileSystemRecursively(File folder, int currentDepth) {
