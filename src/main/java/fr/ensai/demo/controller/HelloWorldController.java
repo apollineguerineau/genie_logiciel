@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.ensai.demo.model.filesystem.FileLeaf;
-import fr.ensai.demo.model.filesystem.FileLeaf2;
+import fr.ensai.demo.model.filesystem.FileLeaf;
 import fr.ensai.demo.model.filesystem.FolderComponent;
 import fr.ensai.demo.model.scan.Scan;
-import fr.ensai.demo.model.scan.Scan2;
+import fr.ensai.demo.model.scan.Scan;
 import fr.ensai.demo.model.strategy.LocalFileSystemScanner;
 import fr.ensai.demo.model.strategy.S3FileSystemScanner;
 import fr.ensai.demo.service.ScanService;
@@ -38,14 +38,6 @@ public class HelloWorldController {
     @Autowired
     private FileLeafService fileLeafService;
 
-
-    // private final ScanService scanService;
-
-    // @Autowired
-    // public HelloWorldController(ScanService scanService) {
-    //     this.scanService = scanService;
-    // }
-
     @GetMapping("/")
     public ResponseEntity<String> index() {
         return new ResponseEntity<>("hello world", HttpStatus.OK);
@@ -61,57 +53,11 @@ public class HelloWorldController {
 
             // FolderComponent rootDirectory = localFileSystemScanner.importFileSystem("/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest", 0);
             Scan scan = localFileSystemScanner.scanFileSystem(rootDirectory,filenameFilter, extensionFilter, 10, 10);
-            // scanService.saveOrUpdateScan(scan);
+            scanService.saveScan(scan);
 
             return new ResponseEntity<>(scan, HttpStatus.OK);
 
     }
-
-    // @GetMapping("/scan")
-    
-    //     public String newScan() {
-    //         // Création d'un objet Scan
-    //         Scan2 scan = new Scan2("local", "2024-02-15", null, null, "/path_test", 0, 0, 10, 10);
-
-    //         // Création des objets FileLeaf pour chaque fichier
-    //         FileLeaf2 file1 = new FileLeaf2("file1.txt", "/path_test", "txt", "15/02/2024", 100, 1);
-    //         FileLeaf2 file2 = new FileLeaf2("file2.txt", "/path_test", "txt", "15/02/2024", 200, 1);
-
-    //         // Ajout des fichiers à la liste des fichiers scannés de l'objet Scan
-    //         scan.addScannedFile(file1);
-    //         scan.addScannedFile(file2);
-            
-    //         scanService.saveScan(scan);
-    //         return("test");
-    //     }
-
-    // @GetMapping("/scans")
-    //     public ResponseEntity<Iterable<Scan2>> getAllScans() {
-    //         Iterable<Scan2> scans = scanService.getScans();
-    //         // Pour chaque scan, charger les fichiers associés
-    //         for (Scan2 scan : scans) {
-    //             List<FileLeaf2> scannedFiles = fileLeafService.getFilesByScanId(scan.getId());
-    //             // System.out.println(scannedFiles);
-    //             scan.setScannedFiles(scannedFiles);
-    // }
-    //         return new ResponseEntity<>(scans, HttpStatus.OK);
-    //     }
-    
-    // @GetMapping("/findscan")
-
-    //     public ResponseEntity<Scan2> getScanById() {
-    //         Optional<Scan2> scanOptional = scanService.getScan(1L);
-    //         if (scanOptional.isPresent()) {
-    //             Scan2 scan = scanOptional.get();
-    //             List<FileLeaf2> scannedFiles = fileLeafService.getFilesByScanId(1L);
-    //             System.out.println(scannedFiles);
-    //             scan.setScannedFiles(scannedFiles);
-    //             return new ResponseEntity<>(scan, HttpStatus.OK);
-    //         } else {
-    //             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //         }
-    //     }
-        
 
     @GetMapping("/S3_file_system")
     public ResponseEntity<Scan> getS3FileSystem(@RequestParam String bucketName,
@@ -121,9 +67,38 @@ public class HelloWorldController {
         S3FileSystemScanner s3FileSystemScanner = new S3FileSystemScanner();
         FolderComponent rootDirectory = s3FileSystemScanner.importFileSystem(bucketName, 0);
         Scan scan = s3FileSystemScanner.scanFileSystem(rootDirectory,filenameFilter,extensionFilter, 10, 10);
+        scanService.saveScan(scan);
         return new ResponseEntity<>(scan, HttpStatus.OK);
 
     }
+
+    @GetMapping("/scans")
+        public ResponseEntity<Iterable<Scan>> getAllScans() {
+            Iterable<Scan> scans = scanService.getScans();
+    
+            return new ResponseEntity<>(scans, HttpStatus.OK);
+        }
+
+    // @GetMapping("/scan")
+    
+    //     public String newScan() {
+    //         // Création d'un objet Scan
+
+    //         // Création des objets FileLeaf pour chaque fichier
+    //         FileLeaf file2 = new FileLeaf("file2.txt", "/path_test", "txt", "15/02/2024", 200, 1);
+    //         FileLeaf file1 = new FileLeaf("file1.txt", "/path_test", "txt", "15/02/2024", 100, 1);
+            
+    //         Scan scan = new Scan("local", "2024-02-15", null, null, "/path_test", 0, 0, 10, 10);
+    //         // Ajout des fichiers à la liste des fichiers scannés de l'objet Scan
+    //         scan.addScannedFile(file1);
+    //         scan.addScannedFile(file2);
+    //         scanService.saveScan(scan);
+    //         return("scan sauvegardé");
+    //     }
+    
+        
+
+
 }
 
 

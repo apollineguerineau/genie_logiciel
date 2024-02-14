@@ -1,20 +1,16 @@
 package fr.ensai.demo.service;
 
+import java.util.Locale.Category;
 import java.util.Optional;
 
+// import org.hibernate.mapping.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.ensai.demo.model.filesystem.FileLeaf;
-import fr.ensai.demo.model.filesystem.FileLeaf2;
-import fr.ensai.demo.model.scan.Scan2;
 import fr.ensai.demo.repository.FileLeafRepository;
-import fr.ensai.demo.repository.ScanRepository;
-
-import java.util.List;
-
 
 
 @Service
@@ -25,15 +21,29 @@ public class FileLeafService {
     @Autowired
     private FileLeafRepository fileLeafRepository;
 
-    public List<FileLeaf2> getFilesByScanId(Long scanId) {
-        return fileLeafRepository.findByScanId(scanId);
+    public Iterable<FileLeaf> getFiles() {
+        return fileLeafRepository.findAll();
     }
 
-    public FileLeaf2 saveFile(FileLeaf2 file) {
-        FileLeaf2 savedFile = fileLeafRepository.save(file);
+    public Optional<FileLeaf> getFileById(Long id) {
+		return fileLeafRepository.findById(id);
+	}
 
-        return savedFile;
-  }
+    public boolean deleteScan(final Long id) {
+        Optional<FileLeaf> file = getFileById(id);
+        fileLeafRepository.deleteById(id);
+        return file.isPresent();
+      }
+    
+    public long countFiles() {
+        return fileLeafRepository.count();
+      }
 
+    public Iterable<FileLeaf> getFilesByScanId(Long scanId) {
+		  return fileLeafRepository.findByScanId(scanId);
+	  }
 
+    public void deleteFileById(Long id) {
+      fileLeafRepository.deleteById(id);
     }
+}

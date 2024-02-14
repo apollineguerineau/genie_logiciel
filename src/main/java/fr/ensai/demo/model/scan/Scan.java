@@ -1,38 +1,81 @@
 package fr.ensai.demo.model.scan;
 
 import fr.ensai.demo.model.filesystem.FileLeaf;
-import java.util.Date;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
+import java.util.ArrayList;
 import java.util.List;
 
+
+
+@Entity
+@Table(name = "Scan")
+
 public class Scan {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
+    @Column(name="file_system_type")
     private String fileSystemType;
-    private String date;
+
+    @Column(name="scan_date")
+    private String scanDate;
+
+    @Column(name="file_name_filter")
     private String fileNameFilter;
+
+    @Column(name="extension_filter")
     private String extensionFilter;
+
+    @Column(name="root_directory_name")
     private String rootDirectoryName;
+
+    @Column(name="execution_time")
     private int executionTime;
+
+    @Column(name="size")
     private int size;
+
+    @Column(name="max_files")
     private int maxFiles;
+
+    @Column(name="max_depth")
     private int maxDepth;
-    private List<FileLeaf> scannedFiles;
 
-    // Constructor
-    public Scan(int id,
-                String fileSystemType,
-                String date,
-                String fileNameFilter,
-                String extensionFilter,
-                String rootDirectoryName,
-                int executionTime,
-                int size,
-                int maxFiles,
-                int maxDepth,
-                List<FileLeaf> scannedFiles) {
+    @ManyToMany(
+			fetch = FetchType.LAZY,
+			cascade = { 
+					CascadeType.PERSIST, 
+					CascadeType.MERGE 
+					}	
+			)
+	@JoinTable(
+			name = "FileScanAssoc",
+			joinColumns = @JoinColumn(name = "scan_id"), 
+			inverseJoinColumns = @JoinColumn(name = "file_id")
+			)
+	private List<FileLeaf> scannedFiles = new ArrayList<>();	
 
-        this.id = id;
+    public Scan() {
+    }
+
+    public Scan(String fileSystemType, String scanDate, String fileNameFilter, String extensionFilter,
+                String rootDirectoryName, int executionTime, int size, int maxFiles, int maxDepth, List<FileLeaf> scannedFiles) {
         this.fileSystemType = fileSystemType;
-        this.date = date;
+        this.scanDate = scanDate;
         this.fileNameFilter = fileNameFilter;
         this.extensionFilter = extensionFilter;
         this.rootDirectoryName = rootDirectoryName;
@@ -43,8 +86,7 @@ public class Scan {
         this.scannedFiles = scannedFiles;
     }
 
-    // Getter methods
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -52,24 +94,8 @@ public class Scan {
         return fileSystemType;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public int getExecutionTime() {
-        return executionTime;
-    }
-
-    public int getMaxFiles() {
-        return maxFiles;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public int getMaxDepth() {
-        return maxDepth;
+    public String getScanDate() {
+        return scanDate;
     }
 
     public String getFileNameFilter() {
@@ -84,7 +110,78 @@ public class Scan {
         return rootDirectoryName;
     }
 
+    public int getExecutionTime() {
+        return executionTime;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getMaxFiles() {
+        return maxFiles;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
     public List<FileLeaf> getScannedFiles() {
         return scannedFiles;
     }
+
+
+    public void setFileSystemType(String fileSystemType) {
+        this.fileSystemType = fileSystemType;
+    }
+
+    public void setScanDate(String scanDate) {
+        this.scanDate = scanDate;
+    }
+
+    public void setFileNameFilter(String fileNameFilter) {
+        this.fileNameFilter = fileNameFilter;
+    }
+
+    public void setExtensionFilter(String extensionFilter) {
+        this.extensionFilter = extensionFilter;
+    }
+
+    public void setRootDirectoryName(String rootDirectoryName) {
+        this.rootDirectoryName = rootDirectoryName;
+    }
+
+    public void setExecutionTime(int executionTime) {
+        this.executionTime = executionTime;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setMaxFiles(int maxFiles) {
+        this.maxFiles = maxFiles;
+    }
+
+    public void setMaxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
+    }
+
+    public void addScannedFile(FileLeaf fileLeaf) {
+        this.scannedFiles.add(fileLeaf);
+    }
+
+    public void setScannedFiles(List<FileLeaf> scannedFiles) {
+        this.scannedFiles = scannedFiles;
+    }
+
+    public void setOneScannedFile(FileLeaf newScannedFile, FileLeaf oldScannedFile) {
+        // Retirer l'ancien fichier s'il est présent
+        if (oldScannedFile != null) {
+            this.scannedFiles.remove(oldScannedFile);
+        }
+        // Ajouter le nouveau fichier
+        this.scannedFiles.add(newScannedFile);
 }
+}
+

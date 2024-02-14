@@ -28,7 +28,7 @@ public class LocalFileSystemScanner implements InterfaceFileSystemScannerStrateg
         for (FileLeaf file : visitedFiles) {
             size+=(file.getSize());
         };
-        Scan scan = new Scan(0, "local file system", "11/02", filenameFilter, extensionFilter, folder.getName(), 0, size, maxFiles, maxDepth, visitedFiles);
+        Scan scan = new Scan("local file system", "11/02", filenameFilter, extensionFilter, folder.getName(), 0, size, maxFiles, maxDepth, visitedFiles);
         return scan; // Placeholder, replace with actual implementation
     }
 
