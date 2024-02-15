@@ -44,7 +44,7 @@ public class Scan {
     private String rootDirectoryName;
 
     @Column(name="execution_time")
-    private int executionTime;
+    private float executionTime;
 
     @Column(name="size")
     private int size;
@@ -73,7 +73,7 @@ public class Scan {
     }
 
     public Scan(String fileSystemType, String scanDate, String fileNameFilter, String extensionFilter,
-                String rootDirectoryName, int executionTime, int size, int maxFiles, int maxDepth, List<FileLeaf> scannedFiles) {
+                String rootDirectoryName, float executionTime, int size, int maxFiles, int maxDepth, List<FileLeaf> scannedFiles) {
         this.fileSystemType = fileSystemType;
         this.scanDate = scanDate;
         this.fileNameFilter = fileNameFilter;
@@ -110,7 +110,7 @@ public class Scan {
         return rootDirectoryName;
     }
 
-    public int getExecutionTime() {
+    public float getExecutionTime() {
         return executionTime;
     }
 
@@ -151,7 +151,7 @@ public class Scan {
         this.rootDirectoryName = rootDirectoryName;
     }
 
-    public void setExecutionTime(int executionTime) {
+    public void setExecutionTime(float executionTime) {
         this.executionTime = executionTime;
     }
 

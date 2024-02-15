@@ -12,7 +12,7 @@ CREATE TABLE Scan (
     file_name_filter VARCHAR(255),
     extension_filter VARCHAR(255),
     root_directory_name VARCHAR(255),
-    execution_time INTEGER,
+    execution_time FLOAT,
     size INTEGER,
     max_files INTEGER,
     max_depth INTEGER

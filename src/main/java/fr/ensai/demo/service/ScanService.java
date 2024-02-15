@@ -3,6 +3,7 @@ package fr.ensai.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.Comparator;
 import java.util.Collections;
 
@@ -15,6 +16,7 @@ import fr.ensai.demo.model.filesystem.FileLeaf;
 import fr.ensai.demo.model.scan.Scan;
 import fr.ensai.demo.repository.ScanRepository;
 import fr.ensai.demo.repository.FileLeafRepository;
+import fr.ensai.demo.service.FileLeafService;
 
 @Service
 public class ScanService {
@@ -52,7 +54,7 @@ public class ScanService {
     }
 
     for (FileLeaf file : copyOfScannedFiles) {
-      Optional<FileLeaf> existingFile = fileLeafRepository.findByNameAndParentFolderName(file.getName(), file.getParentFolderName());
+      Optional<FileLeaf> existingFile = fileLeafRepository.findByAttributes(file.getName(), file.getParentFolderName(), file.getModificationDate(), file.getSize());
 
         if (existingFile.isPresent()) {
             // Le fichier existe déjà, nous pouvons le récupérer
@@ -61,16 +63,6 @@ public class ScanService {
 
         }
       }
-    // // Créer un comparateur basé sur les identifiants des fichiers en ordre croissant
-    // Comparator<FileLeaf> comparator = new Comparator<FileLeaf>() {
-    //     @Override
-
-    //     public int compare(FileLeaf file1, FileLeaf file2) {
-    //         return Long.compare(file1.getId(), file2.getId());
-    //     }
-    // };
-    // // Trier la liste scannedFiles en utilisant le comparateur
-    // Collections.sort(scan.getScannedFiles(), comparator);
 
     Scan savedScan = scanRepository.save(scan);
     return savedScan;
@@ -80,7 +72,164 @@ public class ScanService {
     scanRepository.deleteById(id);
   }
 
+
+  public Optional<Scan> updateScan(Long id, Scan updatedScan) {
+    // Vérifier si le scan existe
+    Optional<Scan> optionalScan = scanRepository.findById(id);
+    if (optionalScan.isPresent()) {
+        // Récupérer le scan existant
+        Scan existingScan = optionalScan.get();
+        // Mettre à jour les propriétés du scan existant avec les nouvelles valeurs
+        existingScan.setFileSystemType(updatedScan.getFileSystemType());
+        existingScan.setScanDate(updatedScan.getScanDate());
+        // Mettre à jour d'autres propriétés selon vos besoins
+
+        // Enregistrer le scan mis à jour dans la base de données
+        Scan updatedScanEntity = scanRepository.save(existingScan);
+        return Optional.of(updatedScanEntity);
+    } else {
+        // Le scan avec l'ID donné n'existe pas
+        return Optional.empty();
+    }
+  }
+
   public long countScans() {
     return scanRepository.count();
+  }
+
+  // Méthode pour comparer deux scans et retourner les différences
+  public String compareScans(long id1, long id2) {
+    Optional<Scan> scan1Op =  scanRepository.findById(id1);
+    if (!scan1Op.isPresent()) {
+      String result = "Le scan d'id " + id1 + "n'est pas présent dans la bdd";
+      return(result);
+    }
+    Optional<Scan> scan2Op =  scanRepository.findById(id2);
+    if (!scan2Op.isPresent()) {
+      String result_ = "Le scan d'id " + id1 + "n'est pas présent dans la bdd";
+      return(result_);
+    }
+    Scan scan1 = scan1Op.get();
+    Scan scan2 = scan2Op.get();
+
+    // Collecter les différences
+    StringJoiner differences = new StringJoiner("\n");
+
+    // Comparer les attributs des scans
+    if (!scan1.getFileSystemType().equals(scan2.getFileSystemType())) {
+      differences.add("FileSystemType: " + scan1.getFileSystemType() + " vs " + scan2.getFileSystemType());
+    }
+    if (!scan1.getScanDate().equals(scan2.getScanDate())) {
+      differences.add("ScanDate: " + scan1.getScanDate() + " vs " + scan2.getScanDate());
+    }
+    if (scan1.getFileNameFilter() != null){
+      if (scan2.getFileNameFilter() != null){
+        if (!scan1.getFileNameFilter().equals(scan2.getFileNameFilter())) {
+          differences.add("FileNameFilter: " + scan1.getFileNameFilter() + " vs " + scan2.getFileNameFilter());
+      }
+      }else{
+        differences.add("FileNameFilter: " + scan1.getFileNameFilter() + " vs null");
+      }
+    }else{
+      if(scan2.getFileNameFilter() != null){
+        differences.add("FileNameFilter: null vs " + scan2.getFileNameFilter());
+      }
+    }
+
+    if (!scan1.getFileSystemType().equals(scan2.getFileSystemType())) {
+      differences.add("FileSystemType: " + scan1.getFileSystemType() + " vs " + scan2.getFileSystemType());
+    }
+    if (!scan1.getScanDate().equals(scan2.getScanDate())) {
+      differences.add("ScanDate: " + scan1.getScanDate() + " vs " + scan2.getScanDate());
+    }
+
+    if (scan1.getExtensionFilter() != null){
+      if (scan2.getExtensionFilter() != null){
+        if (!scan1.getExtensionFilter().equals(scan2.getExtensionFilter())) {
+          differences.add("ExtensionFilter: " + scan1.getExtensionFilter() + " vs " + scan2.getExtensionFilter());
+      }
+      }else{
+        differences.add("ExtensionFilter: " + scan1.getExtensionFilter() + " vs null");
+      }
+    }else{
+      if(scan2.getExtensionFilter() != null){
+        differences.add("ExtensionFilter: null vs " + scan2.getExtensionFilter());
+      }
+    }
+  
+    if (scan1.getExecutionTime()!=scan2.getExecutionTime()) {
+      differences.add("ExecutionTime: " + scan1.getExecutionTime() + " vs " + scan2.getExecutionTime());
+    }
+    if (scan1.getSize()!=scan2.getSize()) {
+      differences.add("Size: " + scan1.getSize() + " vs " + scan2.getSize());
+    }
+    if (!scan1.getRootDirectoryName().equals(scan2.getRootDirectoryName())) {
+      differences.add("RootDirectoryName: " + scan1.getRootDirectoryName() + " vs " + scan2.getRootDirectoryName());
+    }
+    if (scan1.getMaxFiles()!=scan2.getMaxFiles()) {
+      differences.add("MaxFiles: " + scan1.getMaxFiles() + " vs " + scan2.getMaxFiles());
+    }
+    if (scan1.getMaxDepth()!=scan2.getMaxDepth()) {
+      differences.add("MaxDepth: " + scan1.getMaxDepth() + " vs " + scan2.getMaxDepth());
+    }
+
+    // Comparer les fichiers scannés
+    List<FileLeaf> scannedFiles1 = scan1.getScannedFiles();
+    List<FileLeaf> scannedFiles2 = scan2.getScannedFiles();
+
+    List<Long> fileIds1 = new ArrayList<>();
+    for (FileLeaf file : scannedFiles1) {
+        fileIds1.add(file.getId());
+    }
+
+    List<Long> fileIds2 = new ArrayList<>();
+    for (FileLeaf file : scannedFiles2) {
+        fileIds2.add(file.getId());
+    }
+
+    List<Long> commonFileIds = new ArrayList<>(fileIds1);
+    commonFileIds.retainAll(fileIds2);
+
+    // IDs présents dans scannedFiles1 mais pas dans scannedFiles2
+    List<Long> fileIdsOnlyInScannedFiles1 = new ArrayList<>(fileIds1);
+    fileIdsOnlyInScannedFiles1.removeAll(fileIds2);
+
+    // IDs présents dans scannedFiles2 mais pas dans scannedFiles1
+    List<Long> fileIdsOnlyInScannedFiles2 = new ArrayList<>(fileIds2);
+    fileIdsOnlyInScannedFiles2.removeAll(fileIds1);
+    
+    if(commonFileIds.size()!=fileIds1.size()){
+      differences.add("--------------------------");
+      differences.add("Fichiers communs : " + commonFileIds);
+      // for (long id:commonFileIds) {
+      //     Optional<FileLeaf> file = FileLeafRepository.getById(id);
+      //     if(file.isPresent()){
+      //       differences.add("Nom de fichier: " + file.get().getName());
+      //     }
+      // }
+      differences.add("--------------------------");
+      differences.add("Fichiers uniquement dans le scan " + id1 + " : " + fileIdsOnlyInScannedFiles1);
+      // for (long i1:fileIdsOnlyInScannedFiles1) {
+      //   Optional<FileLeaf> file1 = fileLeafService.getFileById(i1);
+      //   if(file1.isPresent()){
+      //     differences.add("Nom de fichier: " + file1.get().getName() + "Taille de fichier: " + file1.get().getSize() + "Date de modification: " + file1.get().getModificationDate());
+      //   }
+      // }
+      differences.add("--------------------------");
+      differences.add("Fichiers uniquement dans le scan " + id2 + " : " + fileIdsOnlyInScannedFiles2);
+      // for (long i2:fileIdsOnlyInScannedFiles2) {
+      //   Optional<FileLeaf> file2 = fileLeafService.getFileById(i2);
+      //   if(file2.isPresent()){
+      //     differences.add("Nom de fichier: " + file2.get().getName() + "Taille de fichier: " + file2.get().getSize() + "Date de modification: " + file2.get().getModificationDate());
+      //   }
+      // }
+    }
+
+    // Retourner les différences sous forme de chaîne de caractères
+    if (differences.length() == 0) {
+        return "Les scans sont identiques.";
+    } else {
+        return "Différences détectées:" + "\n" + differences.toString();
+    }
   }
 }

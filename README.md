@@ -18,8 +18,14 @@ sudo docker run --name db_container_project -e POSTGRES_DB=db_project -e POSTGRE
 # pour run l'application :
 mvn spring-boot:run
 
-http://localhost:8082/local_file_system?path=/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest&filenameFilter=file&extensionFilter=txt
-http://localhost:8082/S3_file_system?bucketName=bucketprojectapolline&filenameFilter=test&extensionFilter=txt
+http://localhost:8082/create_scan/local_file_system?path=/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest&filenameFilter=file&extensionFilter=txt
+http://localhost:8082/create_scan/S3_file_system?bucketName=bucketprojectapolline&filenameFilter=test&extensionFilter=txt
+http://localhost:8082/get_scan?id=1
+http://localhost:8082/get_all_scans
+http://localhost:8082/delete_scan?id=2
+http://localhost:8082/replay_scan?id=1
+http://localhost:8082/compare_scans?id1=5&id2=7
+
 
 
 https://openclassrooms.com/fr/courses/6982461-utilisez-spring-data-pour-interagir-avec-vos-bases-de-donnees/7201194-utilisez-les-relations-unidirectionnelles

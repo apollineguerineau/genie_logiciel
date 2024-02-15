@@ -7,6 +7,9 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.text.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LocalFileSystemScanner implements InterfaceFileSystemScannerStrategy {
 
@@ -22,13 +25,19 @@ public class LocalFileSystemScanner implements InterfaceFileSystemScannerStrateg
     @Override
     public Scan scanFileSystem(FolderComponent folder, String filenameFilter, String extensionFilter, int maxFiles, int maxDepth) {
         FileSystemVisitor visitor = new FileSystemVisitor(filenameFilter, extensionFilter, maxDepth, maxFiles);
+        float startTime = (float) System.currentTimeMillis();
         folder.accept(visitor);
+        float endTime = (float) System.currentTimeMillis(); // Mesure du temps de fin
+        float executionTime = endTime - startTime;
         List<FileLeaf> visitedFiles = visitor.getVisitedFiles();
         int size = 0;
         for (FileLeaf file : visitedFiles) {
             size+=(file.getSize());
         };
-        Scan scan = new Scan("local file system", "11/02", filenameFilter, extensionFilter, folder.getName(), 0, size, maxFiles, maxDepth, visitedFiles);
+        LocalDateTime currentDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String formattedDate = currentDate.format(formatter);
+        Scan scan = new Scan("local file system", formattedDate, filenameFilter, extensionFilter, folder.getAbsolutePath(), executionTime, size, maxFiles, maxDepth, visitedFiles);
         return scan; // Placeholder, replace with actual implementation
     }
 
