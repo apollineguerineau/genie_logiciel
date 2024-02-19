@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
-import java.util.Comparator;
-import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,6 @@ import fr.ensai.demo.model.filesystem.FileLeaf;
 import fr.ensai.demo.model.scan.Scan;
 import fr.ensai.demo.repository.ScanRepository;
 import fr.ensai.demo.repository.FileLeafRepository;
-import fr.ensai.demo.service.FileLeafService;
 
 @Service
 public class ScanService {
@@ -66,10 +63,6 @@ public class ScanService {
 
     Scan savedScan = scanRepository.save(scan);
     return savedScan;
-  }
-
-  public void deleteScanById(Long id) {
-    scanRepository.deleteById(id);
   }
 
 
@@ -136,13 +129,6 @@ public class ScanService {
       }
     }
 
-    if (!scan1.getFileSystemType().equals(scan2.getFileSystemType())) {
-      differences.add("FileSystemType: " + scan1.getFileSystemType() + " vs " + scan2.getFileSystemType());
-    }
-    if (!scan1.getScanDate().equals(scan2.getScanDate())) {
-      differences.add("ScanDate: " + scan1.getScanDate() + " vs " + scan2.getScanDate());
-    }
-
     if (scan1.getExtensionFilter() != null){
       if (scan2.getExtensionFilter() != null){
         if (!scan1.getExtensionFilter().equals(scan2.getExtensionFilter())) {
@@ -201,28 +187,10 @@ public class ScanService {
     if(commonFileIds.size()!=fileIds1.size()){
       differences.add("--------------------------");
       differences.add("Fichiers communs : " + commonFileIds);
-      // for (long id:commonFileIds) {
-      //     Optional<FileLeaf> file = FileLeafRepository.getById(id);
-      //     if(file.isPresent()){
-      //       differences.add("Nom de fichier: " + file.get().getName());
-      //     }
-      // }
       differences.add("--------------------------");
       differences.add("Fichiers uniquement dans le scan " + id1 + " : " + fileIdsOnlyInScannedFiles1);
-      // for (long i1:fileIdsOnlyInScannedFiles1) {
-      //   Optional<FileLeaf> file1 = fileLeafService.getFileById(i1);
-      //   if(file1.isPresent()){
-      //     differences.add("Nom de fichier: " + file1.get().getName() + "Taille de fichier: " + file1.get().getSize() + "Date de modification: " + file1.get().getModificationDate());
-      //   }
-      // }
       differences.add("--------------------------");
       differences.add("Fichiers uniquement dans le scan " + id2 + " : " + fileIdsOnlyInScannedFiles2);
-      // for (long i2:fileIdsOnlyInScannedFiles2) {
-      //   Optional<FileLeaf> file2 = fileLeafService.getFileById(i2);
-      //   if(file2.isPresent()){
-      //     differences.add("Nom de fichier: " + file2.get().getName() + "Taille de fichier: " + file2.get().getSize() + "Date de modification: " + file2.get().getModificationDate());
-      //   }
-      // }
     }
 
     // Retourner les différences sous forme de chaîne de caractères

@@ -10,34 +10,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.ensai.demo.model.filesystem.FileLeaf;
-import fr.ensai.demo.model.filesystem.FileLeaf;
 import fr.ensai.demo.model.filesystem.FolderComponent;
-import fr.ensai.demo.model.scan.Scan;
 import fr.ensai.demo.model.scan.Scan;
 import fr.ensai.demo.model.strategy.LocalFileSystemScanner;
 import fr.ensai.demo.model.strategy.S3FileSystemScanner;
 import fr.ensai.demo.service.ScanService;
-import fr.ensai.demo.repository.ScanRepository;
-import fr.ensai.demo.service.FileLeafService;
-import fr.ensai.demo.repository.FileLeafRepository;
-// import fr.ensai.demo.model.visitor.FileSystemVisitor;
-// import software.amazon.awssdk.regions.Region;
-// import software.amazon.awssdk.services.s3.S3Client;
-// import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-// import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-// import software.amazon.awssdk.services.s3.model.S3Object;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class ScanController {
     @Autowired
     private ScanService scanService;
-
-    @Autowired
-    private FileLeafService fileLeafService;
 
     @GetMapping("/")
     public ResponseEntity<String> index() {
@@ -100,12 +84,9 @@ public class ScanController {
         Optional<Scan> scan = scanService.getScanById(id);
         if (scan.isPresent()) {
             String fileSystemType = scan.get().getFileSystemType();
-            String scanDate = scan.get().getScanDate();
             String fileNameFilter = scan.get().getFileNameFilter();
             String extensionFilter = scan.get().getExtensionFilter();
             String rootDirectoryName = scan.get().getRootDirectoryName();
-            float executionTime = scan.get().getExecutionTime();
-            int size = scan.get().getSize();
             int maxFiles = scan.get().getMaxFiles();
             int maxDepth = scan.get().getMaxDepth();
             if (fileSystemType.equals("local file system")){
@@ -120,9 +101,11 @@ public class ScanController {
                 Scan newScan = s3FileSystemScanner.scanFileSystem(rootDirectory,fileNameFilter, extensionFilter, maxFiles, maxDepth);
                 scanService.updateScan(id, newScan);
             }   
-            return new ResponseEntity<>("okay", HttpStatus.OK); 
+            String body1 = "Scan " + id + " rejoué.";
+            return new ResponseEntity<>(body1, HttpStatus.OK); 
         }
-        return new ResponseEntity<>("nop", HttpStatus.OK); 
+        String body = "Scan " + id + " n'existe pas dans la bdd.";
+        return new ResponseEntity<>(body, HttpStatus.OK); 
     }
 
     @GetMapping("/compare_scans")
@@ -133,7 +116,6 @@ public class ScanController {
         String htmlResponse = "<html><body><h1>Différences détectées :</h1><pre>" + differences + "</pre></body></html>";
         return new ResponseEntity<>(htmlResponse, HttpStatus.OK);
     }
-
 
 }
 

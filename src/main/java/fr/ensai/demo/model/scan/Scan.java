@@ -130,6 +130,9 @@ public class Scan {
         return scannedFiles;
     }
 
+    public void setId(Long id){
+        this.id = id;
+    }
 
     public void setFileSystemType(String fileSystemType) {
         this.fileSystemType = fileSystemType;
