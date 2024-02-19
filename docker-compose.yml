@@ -4,18 +4,19 @@ services:
   db:
     image: postgres
     container_name: db_container_project
+    hostname: db
     environment:
       POSTGRES_DB: db_project
       POSTGRES_USER: db_user
       POSTGRES_PASSWORD: db_password
     ports:
-      - "5433:5432"
+      - "5432:5432"
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
-      - "8080:8082"
+      - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:postgresql://db:5432/db_project
     depends_on:
       - db
 
