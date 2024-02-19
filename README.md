@@ -32,10 +32,5 @@ http://localhost:8082/replay_scan?id=1
 http://localhost:8082/compare_scans?id1=5&id2=7
 
 # image Docker : 
-docker run --name conteneur_project -p 8080:8082 image_project
-
-sudo docker exec conteneur_project RUN mvn clean package
-
-
-
-https://openclassrooms.com/fr/courses/6982461-utilisez-spring-data-pour-interagir-avec-vos-bases-de-donnees/7201194-utilisez-les-relations-unidirectionnelles
+sudo docker-compose build
+sudo docker-compose up

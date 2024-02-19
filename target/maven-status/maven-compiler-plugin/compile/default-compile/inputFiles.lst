@@ -1,0 +1,15 @@
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/repository/ScanRepository.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/visitor/FileSystemVisitor.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/S3FileSystemScanner.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/visitor/InterfaceFileSystemVisitor.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/InterfaceFileSystemScannerStrategy.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/scan/Scan.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/service/ScanService.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/controller/ScanController.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/LocalFileSystemScanner.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/filesystem/FolderComponent.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/filesystem/FileLeaf.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/strategy/FileSystemScanner.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/repository/FileLeafRepository.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/Application.java
+/home/ensai/Documents/3A/genie_logiciel/src/main/java/fr/ensai/demo/model/filesystem/InterfaceFileSystemComponent.java

@@ -1,0 +1,15 @@
+fr/ensai/demo/model/strategy/LocalFileSystemScanner.class
+fr/ensai/demo/model/strategy/S3FileSystemScanner.class
+fr/ensai/demo/model/visitor/InterfaceFileSystemVisitor.class
+fr/ensai/demo/model/strategy/InterfaceFileSystemScannerStrategy.class
+fr/ensai/demo/repository/ScanRepository.class
+fr/ensai/demo/model/visitor/FileSystemVisitor.class
+fr/ensai/demo/controller/ScanController.class
+fr/ensai/demo/model/filesystem/InterfaceFileSystemComponent.class
+fr/ensai/demo/model/filesystem/FileLeaf.class
+fr/ensai/demo/service/ScanService.class
+fr/ensai/demo/model/scan/Scan.class
+fr/ensai/demo/Application.class
+fr/ensai/demo/model/strategy/FileSystemScanner.class
+fr/ensai/demo/model/filesystem/FolderComponent.class
+fr/ensai/demo/repository/FileLeafRepository.class
