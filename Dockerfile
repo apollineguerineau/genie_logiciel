@@ -26,7 +26,3 @@ RUN mvn clean package -DskipTests=true
 
 # Commande à exécuter lorsque le conteneur démarre
 CMD ["java", "-jar", "target/demo-1.0.jar"]
-
-# RUN mvn -f pom.xml clean install -DskipTests=true
-
-# CMD mvn spring-boot:run
