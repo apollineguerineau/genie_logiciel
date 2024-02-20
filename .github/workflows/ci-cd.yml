@@ -28,10 +28,10 @@ jobs:
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
         docker-compose push
 
-  # create-ec2:
-    # runs-on: ubuntu-latest
+  create-ec2:
+    runs-on: ubuntu-latest
     
-    # steps:
+    steps:
 
       # - name: Use SSH key
       #   uses: webfactory/ssh-agent@v0.5.3
@@ -68,13 +68,13 @@ jobs:
       # - name: Install SSH client
       #   run: sudo apt-get install -y openssh-client
 
-      # - name: Use SSH key
-      #   uses: webfactory/ssh-agent@v0.5.3
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+      - name: Use SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
 
-      # - name: SSH into EC2 instance and deploy Docker services
-      #   run: |
-      #     ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
+      - name: SSH into EC2 instance and deploy Docker services
+        run: |
+          ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
 
   
