@@ -65,6 +65,14 @@ jobs:
 
       # - name: Transfer docker-compose.yml to EC2 instance
       #   run: scp -i /home/ensai/Documents/key_project docker-compose.yml ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com:~/docker-compose.yml
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Use SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+          
       - name: SSH into EC2 instance and deploy Docker services
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
