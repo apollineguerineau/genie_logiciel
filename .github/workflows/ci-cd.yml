@@ -20,7 +20,7 @@ jobs:
       run: docker-compose up -d
 
     - name: Run tests
-      run: docker-compose exec app mvn test
+      run: docker-compose exec -T app mvn test
 
     # - name: Push Docker image
     #   if: success()
