@@ -17,7 +17,7 @@ services:
     build: .
     ports:
       - "8080:8080"
-    image: apolline/app
+    image: ${DOCKER_USERNAME}/app
     environment:
       - spring.datasource.url=jdbc:postgresql://db:5432/db_project
     depends_on:
