@@ -38,24 +38,24 @@ jobs:
       #   with:
       #     ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
 
-      - name: Run AWS commands
-        run: |
-        INSTANCE_ID=$(aws ec2 run-instances \
-                      --image-id ami-0440d3b780d96b29d \
-                      --count 1 \
-                      --instance-type t2.micro \
-                      --key-name project_key \
-                      --security-group-ids sg-0d81839558ebc767f \
-                      --query 'Instances[0].InstanceId' \
-                      --output text)
-        PUBLIC_IP=$(aws ec2 describe-instances \
-                    --instance-ids $INSTANCE_ID \
-                    --query 'Reservations[0].Instances[0].PublicIpAddress' \
-                    --output text)
+      # - name: Run AWS commands
+      #   run: |
+      #   INSTANCE_ID=$(aws ec2 run-instances \
+      #                 --image-id ami-0440d3b780d96b29d \
+      #                 --count 1 \
+      #                 --instance-type t2.micro \
+      #                 --key-name project_key \
+      #                 --security-group-ids sg-0d81839558ebc767f \
+      #                 --query 'Instances[0].InstanceId' \
+      #                 --output text)
+      #   PUBLIC_IP=$(aws ec2 describe-instances \
+      #               --instance-ids $INSTANCE_ID \
+      #               --query 'Reservations[0].Instances[0].PublicIpAddress' \
+      #               --output text)
 
         
-      - name: Wait for EC2 instance to start
-        run: sleep 60  # Pour que l'instance démarre complètement
+      # - name: Wait for EC2 instance to start
+      #   run: sleep 60  # Pour que l'instance démarre complètement
 
   # deploy:
   #   runs-on: ubuntu-latest
@@ -63,10 +63,10 @@ jobs:
 
   #   steps:
 
-  #     - name: Transfer docker-compose.yml to EC2 instance
-  #       run: scp -i ssh-private-key docker-compose.yml ec2-user@${{ needs.create-ec2.outputs.public-ip }}:~/docker-compose.yml
-  #     - name: SSH into EC2 instance and deploy Docker services
-  #       run: |
-  #         ssh -i ssh-private-key ec2-user@${{ needs.create-ec2.outputs.public-ip }} "docker-compose pull && docker-compose up -d"
+      - name: Transfer docker-compose.yml to EC2 instance
+        run: scp -i ssh-private-key docker-compose.yml ec2-user@$3.85.244.220:~/docker-compose.yml
+      - name: SSH into EC2 instance and deploy Docker services
+        run: |
+          ssh -i ssh-private-key ec2-user@$3.85.244.220 "docker-compose pull && docker-compose up -d"
 
   
