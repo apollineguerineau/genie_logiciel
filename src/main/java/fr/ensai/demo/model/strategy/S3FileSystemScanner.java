@@ -2,6 +2,8 @@ package fr.ensai.demo.model.strategy;
 
 import fr.ensai.demo.model.filesystem.FileLeaf;
 import fr.ensai.demo.model.filesystem.FolderComponent;
+import fr.ensai.demo.model.filesystem.InterfaceFileSystemComponent;
+
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -19,14 +21,19 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Arrays;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.ensai.demo.model.scan.Scan;
 import fr.ensai.demo.model.visitor.FileSystemVisitor;
+
+
 
 public class S3FileSystemScanner implements InterfaceFileSystemScannerStrategy {
 
     @Override
     public FolderComponent importFileSystem(String bucketName, int currentDepth) {
+    
     S3Client s3Client = S3Client.builder().region(Region.US_EAST_1).build();
     ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder().bucket(bucketName).build();
     ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
@@ -35,16 +42,49 @@ public class S3FileSystemScanner implements InterfaceFileSystemScannerStrategy {
     FolderComponent rootFolder = new FolderComponent(bucketName, bucketName, currentDepth);
 
     for (S3Object s3Object : s3Objects) {
-        String key = s3Object.key();
-        String parentFolderName = key.substring(0, key.lastIndexOf("/"));
-        String fileName = key.substring(key.lastIndexOf("/") + 1);
-        
-        // Récupérer les métadonnées de l'objet S3
+
         try {
+            String absolutePath = bucketName + "/" + s3Object.key();
+            String[] decomposedPath = absolutePath.split("/");
+            String fileName = decomposedPath[decomposedPath.length - 1];
+            String parentFolderName;
+            if(absolutePath.lastIndexOf("/") == -1){
+                parentFolderName = bucketName;
+            } else {
+                parentFolderName = absolutePath.substring(0, absolutePath.lastIndexOf("/"));
+            }
+
+            FolderComponent currentFolder = rootFolder;
+
+            for(int i = 1; i < decomposedPath.length - 1; i++){
+
+                boolean found = false;
+                String folderPath = absolutePath.substring(0,StringUtils.ordinalIndexOf(absolutePath, "/", i + 1));
+
+                for(InterfaceFileSystemComponent component: currentFolder.getComponents()){
+                    if ((component instanceof FolderComponent)){
+                        FolderComponent componentCasted = (FolderComponent)component;
+                        //if folder exists, great, just use it
+                        if(componentCasted.getAbsolutePath() == folderPath){
+                            currentFolder = componentCasted;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                // if not found, just create it!
+                if(!found){
+                    FolderComponent newFolder = new FolderComponent(decomposedPath[i], absolutePath, i);
+                    currentFolder.addComponent(newFolder);
+                    currentFolder = newFolder;
+                }
+            }
+
+            // retrieve object metadata
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .build();
+                        .bucket(bucketName)
+                        .key(s3Object.key())
+                        .build();
             ResponseBytes<GetObjectResponse> responseBytes = s3Client.getObjectAsBytes(getObjectRequest);
             GetObjectResponse getObjectResponse = responseBytes.response();
             
@@ -57,10 +97,14 @@ public class S3FileSystemScanner implements InterfaceFileSystemScannerStrategy {
             long size = getObjectResponse.contentLength();
             
             // Créer un objet FileLeaf avec les informations extraites
-            FileLeaf fileLeaf = new FileLeaf(fileName, parentFolderName, extension, formattedDate, size, currentDepth);
-            
-            // Ajouter le FileLeaf à la racine du système de fichiers
-            rootFolder.addComponent(fileLeaf);
+            System.out.print(fileName);
+            int l = (int)(decomposedPath.length - 1);
+            FileLeaf fileLeaf = new FileLeaf(fileName, parentFolderName, extension, formattedDate, size, l);
+            // Ajouter le FileLeaf au du système de fichiers
+            currentFolder.addComponent(fileLeaf);
+
+            // Récupérer les métadonnées de l'objet S3
+        
         } catch (NoSuchKeyException e) {
             // Gérer l'erreur si la clé n'existe pas dans le bucket
             System.err.println("Object not found: " + e.getMessage());
