@@ -40,21 +40,18 @@ jobs:
 
       - name: Run AWS commands
         run: |
-          INSTANCE_ID=$(aws ec2 run-instances \
-                        --image-id ami-0440d3b780d96b29d \
-                        --count 1 \
-                        --instance-type t2.micro \
-                        --key-name project_key \
-                        --security-group-ids sg-0d81839558ebc767f \
-                        --query 'Instances[0].InstanceId' \
-                        --output text)
-          PUBLIC_IP=$(aws ec2 describe-instances \
-                      --instance-ids $INSTANCE_ID \
-                      --query 'Reservations[0].Instances[0].PublicIpAddress' \
+        INSTANCE_ID=$(aws ec2 run-instances \
+                      --image-id ami-0440d3b780d96b29d \
+                      --count 1 \
+                      --instance-type t2.micro \
+                      --key-name project_key \
+                      --security-group-ids sg-0d81839558ebc767f \
+                      --query 'Instances[0].InstanceId' \
                       --output text)
-          echo "::set-output name=instance-id::$INSTANCE_ID"
-          echo "::set-output name=public-ip::$PUBLIC_IP"
-        shell: bash
+        PUBLIC_IP=$(aws ec2 describe-instances \
+                    --instance-ids $INSTANCE_ID \
+                    --query 'Reservations[0].Instances[0].PublicIpAddress' \
+                    --output text)
 
         
       - name: Wait for EC2 instance to start
