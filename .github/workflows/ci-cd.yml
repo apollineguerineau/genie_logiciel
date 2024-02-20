@@ -67,6 +67,6 @@ jobs:
         run: scp -i ssh-private-key docker-compose.yml ec2-user@$3.85.244.220:~/docker-compose.yml
       - name: SSH into EC2 instance and deploy Docker services
         run: |
-          ssh -i ssh-private-key ec2-user@$3.85.244.220 "docker-compose pull && docker-compose up -d"
+          ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@$3.85.244.220 "docker-compose pull && docker-compose up -d"
 
   
