@@ -33,10 +33,10 @@ jobs:
     
     steps:
 
-      # - name: Use SSH key
-      #   uses: webfactory/ssh-agent@v0.5.3
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+      - name: Use SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
 
       # - name: Run AWS commands
       #   run: |
