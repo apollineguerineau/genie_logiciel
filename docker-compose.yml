@@ -11,6 +11,7 @@ services:
       POSTGRES_PASSWORD: db_password
     ports:
       - "5432:5432"
+    image: apolline/db
     volumes : 
       - postgres_data:/var/lib/postgresql/data
   app:
