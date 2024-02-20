@@ -33,10 +33,10 @@ jobs:
     
     steps:
 
-      - name: Use SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+      # - name: Use SSH key
+      #   uses: webfactory/ssh-agent@v0.5.3
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
 
       # - name: Run AWS commands
       #   run: |
@@ -64,9 +64,9 @@ jobs:
   #   steps:
 
       - name: Transfer docker-compose.yml to EC2 instance
-        run: scp -i ssh-private-key docker-compose.yml ec2-user@$3.85.244.220:~/docker-compose.yml
+        run: scp -i ssh-private-key docker-compose.yml ec2-user@3.85.244.220:~/docker-compose.yml
       - name: SSH into EC2 instance and deploy Docker services
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@$3.85.244.220 "docker-compose pull && docker-compose up -d"
+          ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@3.85.244.220 "docker-compose pull && docker-compose up -d"
 
   
