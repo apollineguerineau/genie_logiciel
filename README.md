@@ -22,6 +22,9 @@ ouvrir le fichier target/site/jacoco/index.html dans un navigateur web
 # pour run l'application :
 mvn spring-boot:run
 
+http://0.0.0.0:8080/get_all_scans
+http://0.0.0.0:8080/create_scan/local_file_system?path=/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest&filenameFilter=file&extensionFilter=txt
+
 http://localhost:8082/swagger
 http://localhost:8082/create_scan/local_file_system?path=/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest&filenameFilter=file&extensionFilter=txt
 http://localhost:8082/create_scan/S3_file_system?bucketName=bucketprojectapolline&filenameFilter=test&extensionFilter=txt
