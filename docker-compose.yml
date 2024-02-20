@@ -11,14 +11,22 @@ services:
       POSTGRES_PASSWORD: db_password
     ports:
       - "5432:5432"
+    volumes : 
+      - postgres_data:/var/lib/postgresql/data
   app:
     build: .
     ports:
       - "8080:8080"
+    image: ${DOCKER_USERNAME}/app
     environment:
       - spring.datasource.url=jdbc:postgresql://db:5432/db_project
     depends_on:
       - db
+    volumes:
+      - /home:/home
+volumes:
+  postgres_data:
+      
 
 
 

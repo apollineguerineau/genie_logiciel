@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: fr.ensai.demo.service.ScanServiceTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.493 s -- in fr.ensai.demo.service.ScanServiceTest
