@@ -67,6 +67,6 @@ jobs:
       #   run: scp -i /home/ensai/Documents/key_project docker-compose.yml ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com:~/docker-compose.yml
       - name: SSH into EC2 instance and deploy Docker services
         run: |
-          ssh -i /home/ensai/Documents/key_project ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
+          ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
 
   
