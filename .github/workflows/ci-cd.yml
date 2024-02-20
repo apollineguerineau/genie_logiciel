@@ -53,8 +53,6 @@ jobs:
                       --instance-ids $INSTANCE_ID \
                       --query 'Reservations[0].Instances[0].PublicIpAddress' \
                       --output text)
-          echo "::set-output name=instance-id::$INSTANCE_ID"
-          echo "::set-output name=public-ip::$PUBLIC_IP"
         
       - name: Wait for EC2 instance to start
         run: sleep 60  # Pour que l'instance démarre complètement
