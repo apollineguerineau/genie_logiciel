@@ -50,6 +50,8 @@ jobs:
           # sudo apt install docker
           # Vous pouvez exécuter d'autres commandes ici
           wget https://raw.githubusercontent.com/apollineguerineau/genie_logiciel/main/docker-compose.yml
+          sudo curl -L "https://github.com/docker/compose/releases/download/{VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
           docker-compose pull
   # create-ec2:
   #   build:
