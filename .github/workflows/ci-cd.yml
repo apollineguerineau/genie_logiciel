@@ -41,7 +41,7 @@ jobs:
       with:
         host: ec2-35-172-181-182.compute-1.amazonaws.com
         username: ec2-user
-        key: ${{ secrets.EC2_SSH_KEY }}
+        key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
         port: 22
         script: |
           # Commandes à exécuter sur l'instance EC2 après la connexion SSH
