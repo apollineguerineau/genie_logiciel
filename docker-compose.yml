@@ -16,7 +16,7 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "80:80"
     image: ${DOCKER_USERNAME}/app
     environment:
       - spring.datasource.url=jdbc:postgresql://db:5432/db_project
