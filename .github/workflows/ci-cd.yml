@@ -28,10 +28,48 @@ jobs:
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
         docker-compose push
 
-  create-ec2:
-    runs-on: ubuntu-latest
-    
-    steps:
+    - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: us-east-1
+
+  # create-ec2:
+  #   build:
+  #     runs-on: ubuntu-latest
+      
+  #     steps: 
+        
+  #       - name: copy file via ssh password
+  #         uses: appleboy/scp-action@v0.1.7
+  #         with:
+  #           host: ${{ secrets.HOST }}
+  #           username: ${{ secrets.USERNAME }}
+  #           key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+  #           port: ${{ secrets.PORT }}
+  #           source: "/home/ensai/Documents/3A/genie_logiciel/docker-compose.yml"
+  #           target: "/home"
+
+  #       - name: Docker pull and run from hub
+  #         uses: appleboy/ssh-action@master
+  #         with:
+  #           host: ${{ secrets.HOST }}
+  #           username: ${{ secrets.USERNAME }}
+  #           key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+  #           envs: GITHUB_SHA
+  #           script: |
+
+
+        # - name: Use SSH key
+        #   uses: webfactory/ssh-agent@v0.5.3
+        #   with:
+        #     ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+
+        # - name: SSH into EC2 instance and deploy Docker services
+        #   run: |
+        #     ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
+
 
       # - name: Use SSH key
       #   uses: webfactory/ssh-agent@v0.5.3
@@ -67,14 +105,5 @@ jobs:
       #   run: scp -i /home/ensai/Documents/key_project docker-compose.yml ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com:~/docker-compose.yml
       # - name: Install SSH client
       #   run: sudo apt-get install -y openssh-client
-
-      - name: Use SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
-
-      - name: SSH into EC2 instance and deploy Docker services
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_AWS_KEY }} ec2-user@ec2-34-207-148-62.compute-1.amazonaws.com
 
   
