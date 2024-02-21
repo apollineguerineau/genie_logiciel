@@ -39,7 +39,7 @@ jobs:
     - name: SSH into EC2 Instance
       uses: appleboy/ssh-action@master
       with:
-        host: ec2-54-242-73-204.compute-1.amazonaws.com
+        host: ec2-44-223-23-221.compute-1.amazonaws.com
         username: ec2-user
         key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
         port: 22
@@ -53,7 +53,7 @@ jobs:
     - name: Pull and run image docker
       uses: appleboy/ssh-action@master
       with:
-        host: ec2-54-242-73-204.compute-1.amazonaws.com
+        host: ec2-44-223-23-221.compute-1.amazonaws.com
         username: ec2-user
         key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
         port: 22
