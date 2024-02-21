@@ -46,8 +46,8 @@ jobs:
         script: |
           # Commandes à exécuter sur l'instance EC2 après la connexion SSH
           # Par exemple :
-          sudo apt update
-          sudo apt install docker
+          # sudo apt update
+          # sudo apt install docker
           # Vous pouvez exécuter d'autres commandes ici
 
   # create-ec2:
