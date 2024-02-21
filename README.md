@@ -1,40 +1,40 @@
-# genie_logiciel
-cd genie_logiciel
-mvn package
+# Application web backend qui scanne les répertoires et les fichiers
 
-# changer les credentials pour aws
-aws configure
-aws configure set aws_session_token "<token>"
+## Contenu du dépôt : 
 
-# upload un dossier dans un bucket S3 (pour tester)
-aws s3 sync dossier_a_upload s3://bucketprojectapolline/dossier1
+* Un fichier dockerfile qui permet de créer l'image /app.
+* Un fichier docker-compose qui permet de gérer la base de données postgres et l'application.
+* Un fichier ci-cd.ylm qui permet de déclencher des actions CICD : 
+    * consruit l'image à partir du docker-compose.yml
+    * run les tests et push l'image sur docker hub si les tests passent
+    * se connecte à aws
+    * se connecte en ssh à une instance ec2 pour installer Docker, pull l'image et le fichier docker-compose.yml
 
-# base de données local (pour l'instant): 
-sudo docker stop db_container_project
-sudo docker rm db_container_project
-sudo docker run --name db_container_project -e POSTGRES_DB=db_project -e POSTGRES_USER=db_user -e POSTGRES_PASSWORD=db_password -p 5433:5432 -d postgres
+## Comment utiliser l'application : 
+### 1. Créer une paire de clés puis une instance ec2 sur aws qui utilise cette paire de clés
+### 2. Remplir un fichier .env avec 
+DOCKER_USERNAME
+### 3. 6 variables secrètes à remplir sur github :
+Variables secrètes de configuration pour aws
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* AWS_SECRET_TOKEN
+Variable qui stocke la clé privée reliée à la clé publique de l'instance ec2
+SSH_PRIVATE_AWS_KEY
+Variables secrètes pour se connecter à docker hub
+* DOCKER_PASSWORD
+* DOCKER_USERNAME
+### 4. Se connecter en ssh à l'instance ec2 puis
+* export DOCKER_USERNAME=<your-docker-username>
+* docker-compose pull
+### 5. Requête http pour utiliser l'application
 
-# pour run les tests : 
-mvn test
-# puis pour voir la  converture des tests : 
-ouvrir le fichier target/site/jacoco/index.html dans un navigateur web
-
-# pour run l'application :
-mvn spring-boot:run
-
-http://0.0.0.0:8080/get_all_scans
-http://0.0.0.0:8080/create_scan/local_file_system?path=/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest&filenameFilter=file&extensionFilter=txt
-http://0.0.0.0:8080/create_scan/S3_file_system?bucketName=bucketprojectapolline
-
-http://localhost:8082/swagger
-http://localhost:8082/create_scan/local_file_system?path=/home/ensai/Documents/3A/GENIE_LOGICIEL/all/dirtest&filenameFilter=file&extensionFilter=txt
-http://localhost:8082/create_scan/S3_file_system?bucketName=bucketprojectapolline&filenameFilter=test&extensionFilter=txt
-http://localhost:8082/get_scan?id=1
-http://localhost:8082/get_all_scans
-http://localhost:8082/delete_scan?id=2
-http://localhost:8082/replay_scan?id=1
-http://localhost:8082/compare_scans?id1=5&id2=7
-
-# image Docker : 
-sudo docker-compose build
-sudo docker-compose up
+## Endpoint exposé par l'application : 
+/swagger
+/create_scan/local_file_system?path=...
+/create_scan/S3_file_system?bucketName=...
+/get_scan?id=...
+/get_all_scans
+/delete_scan?id=...
+/replay_scan?id=...
+/compare_scans?id1=...&id2=...
