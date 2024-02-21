@@ -44,7 +44,11 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
         port: 22
         script: |
-          sudo yum install docker
+          sudo yum update -y
+          sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+          sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+          sudo yum install docker-ce docker-ce-cli containerd.io
+          # sudo yum install docker
           sudo service docker start
           sudo usermod -aG docker $USER
           exit
@@ -61,8 +65,10 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           export DOCKER_USERNAME=apolline
+          wget https://raw.githubusercontent.com/apollineguerineau/genie_logiciel/main/docker-compose.yml
           docker-compose pull
           docker-compose up
+
 
   # create-ec2:
   #   build:
