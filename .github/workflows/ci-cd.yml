@@ -64,7 +64,7 @@ jobs:
           export DOCKER_USERNAME=apolline
           wget https://raw.githubusercontent.com/apollineguerineau/genie_logiciel/main/docker-compose.yml
           docker-compose pull
-          docker-compose up
+          # docker-compose up
 
 
   # create-ec2:
