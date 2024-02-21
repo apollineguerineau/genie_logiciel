@@ -44,15 +44,26 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
         port: 22
         script: |
-          # Commandes à exécuter sur l'instance EC2 après la connexion SSH
-          # Par exemple :
-          # sudo apt update
-          # sudo apt install docker
-          # Vous pouvez exécuter d'autres commandes ici
-          wget https://raw.githubusercontent.com/apollineguerineau/genie_logiciel/main/docker-compose.yml
+          sudo yum install docker
+          sudo service docker start
+          sudo usermod -aG docker $USER
+          exit
+
+    - name: Pull and run image docker
+      uses: appleboy/ssh-action@master
+      with:
+        host: ec2-35-172-181-182.compute-1.amazonaws.com
+        username: ec2-user
+        key: ${{ secrets.SSH_PRIVATE_AWS_KEY }}
+        port: 22
+        script: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
+          export DOCKER_USERNAME=apolline
           docker-compose pull
+          docker-compose up
+
   # create-ec2:
   #   build:
   #     runs-on: ubuntu-latest
